@@ -5,15 +5,23 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.dictionary.R
 import com.example.dictionary.databinding.ActivityDetailBinding
+import com.example.dictionary.datas.DictionaryDatabase
 import com.example.dictionary.models.Word
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DetailActivity : AppCompatActivity() {
 
     private val binding: ActivityDetailBinding by lazy {
         ActivityDetailBinding.inflate(layoutInflater)
     }
+
+    private val db = DictionaryDatabase.getInstance(this)
+    private val noteDao = db.dictionaryDAO()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +33,15 @@ class DetailActivity : AppCompatActivity() {
             insets
         }
 
-        val word = intent.getParcelableExtra<Word>("word")
-        if (word != null) {
-            binding.tvHanDetails.text = word.han
-            binding.tvVietDetails.text = word.viet
-            binding.tvPinyinDetails.text = word.pinyin
-            binding.tvMeanDetails.text = word.mean
+        val id = intent.getIntExtra("id", 0)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val word = noteDao.findByID(id)
+            withContext(Dispatchers.Main) {
+                binding.tvHanDetails.text = word.han
+                binding.tvVietDetails.text = word.viet
+                binding.tvPinyinDetails.text = word.pinyin
+                binding.tvMeanDetails.text = word.mean
+            }
         }
 
         binding.ivBack.setOnClickListener {

@@ -1,5 +1,6 @@
 package com.example.dictionary.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -43,11 +44,7 @@ class MainActivity : AppCompatActivity(), DictionaryAdapter.OnAdapterListener {
             insets
         }
 
-        db = Room.databaseBuilder(
-            applicationContext,
-            DictionaryDatabase::class.java,
-            "vt.db"
-        ).createFromAsset("vt.db").build()
+        db = DictionaryDatabase.getInstance(this)
         noteDao = db.dictionaryDAO()
 
         adapter = DictionaryAdapter(words, this)
@@ -62,7 +59,6 @@ class MainActivity : AppCompatActivity(), DictionaryAdapter.OnAdapterListener {
                 if (searchQuery.isNotEmpty()) {
                     lifecycleScope.launch(Dispatchers.IO) {
                         val list = noteDao.findByString(searchQuery)
-                        Log.d("OP", list.toString())
                         withContext(Dispatchers.Main) {
                             adapter.updateWords(list)
                             adapter.notifyDataSetChanged()
@@ -76,7 +72,9 @@ class MainActivity : AppCompatActivity(), DictionaryAdapter.OnAdapterListener {
         }
     }
 
-    override fun onClick(word: Word) {
-        TODO("Not yet implemented")
+    override fun onClick(id: Int?) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("id", id)
+        startActivity(intent)
     }
 }

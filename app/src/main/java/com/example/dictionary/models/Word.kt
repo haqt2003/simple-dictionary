@@ -4,44 +4,28 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "han_tu")
+@Entity(tableName = "han_tu", indices = [
+    Index(value = ["pinyin"], name = "h_p"),
+    Index(value = ["viet"], name = "h_v"),
+    Index(value = ["han"], name = "h_h")
+])
 data class Word(
-    @PrimaryKey(autoGenerate = true) val _id: Int = 1,
-    val pinyin: String,
-    val han: String,
-    val viet: String,
-    val mean: String
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readString().toString(),
-        parcel.readString().toString(),
-        parcel.readString().toString(),
-        parcel.readString().toString()
-    )
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "_id")
+    val id: Int? = null,
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(_id)
-        parcel.writeString(pinyin)
-        parcel.writeString(han)
-        parcel.writeString(viet)
-        parcel.writeString(mean)
-    }
+    @ColumnInfo(name = "han")
+    val han: String? = null,
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    @ColumnInfo(name = "viet")
+    val viet: String? = null,
 
-    companion object CREATOR : Parcelable.Creator<Word> {
-        override fun createFromParcel(parcel: Parcel): Word {
-            return Word(parcel)
-        }
+    @ColumnInfo(name = "pinyin")
+    val pinyin: String? = null,
 
-        override fun newArray(size: Int): Array<Word?> {
-            return arrayOfNulls(size)
-        }
-    }
-
-}
+    @ColumnInfo(name = "mean")
+    val mean: String? = null
+)

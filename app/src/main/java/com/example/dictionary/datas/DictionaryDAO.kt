@@ -9,6 +9,15 @@ interface DictionaryDAO {
     @Query("SELECT * FROM han_tu")
     suspend fun getAll(): List<Word>
 
-    @Query("SELECT * FROM han_tu WHERE han LIKE :str OR viet LIKE :str OR pinyin LIKE :str OR mean LIKE :str")
+    @Query("""
+        SELECT * FROM han_tu
+        WHERE han LIKE '%' || :str || '%' 
+       OR viet LIKE '%' || :str || '%' 
+       OR pinyin LIKE '%' || :str || '%' 
+       OR mean LIKE '%' || :str || '%'
+       """)
     suspend fun findByString(str: String): List<Word>
+
+    @Query("SELECT * FROM han_tu WHERE _id = :id")
+    suspend fun findByID(id: Int): Word
 }

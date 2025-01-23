@@ -23,7 +23,7 @@ class DictionaryAdapter(
         holder.bind(word)
 
         holder.itemView.setOnClickListener {
-            listener.onClick(word)
+            listener.onClick(word.id)
         }
     }
 
@@ -37,7 +37,7 @@ class DictionaryAdapter(
     }
 
     interface OnAdapterListener {
-        fun onClick(word: Word)
+        fun onClick(id: Int?)
     }
 
     class NoteViewHolder(private val binding: LayoutItemBinding) :

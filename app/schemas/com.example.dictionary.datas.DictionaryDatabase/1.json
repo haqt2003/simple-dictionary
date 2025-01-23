@@ -2,41 +2,41 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "79e00cf84e374f08db66f5e93e9da068",
+    "identityHash": "28550d12ece7ec159b2f8bf205b0d5c0",
     "entities": [
       {
         "tableName": "han_tu",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `pinyin` TEXT NOT NULL, `han` TEXT NOT NULL, `viet` TEXT NOT NULL, `mean` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT, `han` TEXT, `viet` TEXT, `pinyin` TEXT, `mean` TEXT)",
         "fields": [
           {
-            "fieldPath": "_id",
+            "fieldPath": "id",
             "columnName": "_id",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "pinyin",
-            "columnName": "pinyin",
-            "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "han",
             "columnName": "han",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "viet",
             "columnName": "viet",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
+          },
+          {
+            "fieldPath": "pinyin",
+            "columnName": "pinyin",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "mean",
             "columnName": "mean",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -45,14 +45,42 @@
             "_id"
           ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "h_p",
+            "unique": false,
+            "columnNames": [
+              "pinyin"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `h_p` ON `${TABLE_NAME}` (`pinyin`)"
+          },
+          {
+            "name": "h_v",
+            "unique": false,
+            "columnNames": [
+              "viet"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `h_v` ON `${TABLE_NAME}` (`viet`)"
+          },
+          {
+            "name": "h_h",
+            "unique": false,
+            "columnNames": [
+              "han"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `h_h` ON `${TABLE_NAME}` (`han`)"
+          }
+        ],
         "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '79e00cf84e374f08db66f5e93e9da068')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '28550d12ece7ec159b2f8bf205b0d5c0')"
     ]
   }
 }
