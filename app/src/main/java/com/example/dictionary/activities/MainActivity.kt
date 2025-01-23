@@ -1,6 +1,7 @@
 package com.example.dictionary.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity(), DictionaryAdapter.OnAdapterListener {
             applicationContext,
             DictionaryDatabase::class.java,
             "vt.db"
-        ).build()
+        ).createFromAsset("vt.db").build()
         noteDao = db.dictionaryDAO()
 
         adapter = DictionaryAdapter(words, this)
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity(), DictionaryAdapter.OnAdapterListener {
                 if (searchQuery.isNotEmpty()) {
                     lifecycleScope.launch(Dispatchers.IO) {
                         val list = noteDao.findByString(searchQuery)
+                        Log.d("OP", list.toString())
                         withContext(Dispatchers.Main) {
                             adapter.updateWords(list)
                             adapter.notifyDataSetChanged()
